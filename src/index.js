@@ -1,22 +1,17 @@
 module.exports = function check(str, bracketsConfig) {
-  let map = new Map();
-  for (let i = 0; i <bracketsConfig.length; i++){
-    map.set(bracketsConfig[i][0], 0);
-    map.set(bracketsConfig[i][1], 0);
-  }
+  var queue = [];
 
   var splitted = str.split('');
-  for (let j = 0; j <splitted.length; j++){
-  if (map.has(splitted[j])){
-    map.set(splitted[j],   map.get(splitted[j]) +1 );
+  for (let j = 0; j < splitted.length; j++) {
+    for (let s = 0; s < bracketsConfig.length; s++) {
+      if (splitted[j] == bracketsConfig[s][0]) queue.push(splitted[j]);
+      if (splitted[j] == bracketsConfig[s][1]) {
+        if (queue.pop() != bracketsConfig[s][0]) 
+          return false;
+      }
+    }
   }
-  }
-  for (let s = 0; s <bracketsConfig.length; s++){
-    if (map.get(bracketsConfig[s][0]) != map.get(bracketsConfig[s][1]))
-      {
-      console.log('before false');
-       return false;}
-  }
-  console.log('before true');
-  return true;
-}
+  
+  return queue.length == 0;
+};
+
